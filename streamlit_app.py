@@ -1,4 +1,4 @@
-# streamlit_app.py (Upgraded with all 5 Enhancements)
+# streamlit_app.py (Professional Bloomberg-like UI)
 
 import streamlit as st
 import requests
@@ -8,16 +8,19 @@ from datetime import datetime
 # Set Streamlit page config
 st.set_page_config(page_title="Financial Risk Scanner", page_icon="📈", layout="wide")
 
-st.title("📈 Financial Risk Scanner Dashboard")
-st.write("Real-time RiskScore based on latest events.")
-
 # Backend API URL
-api_url = "https://scanner-mvp.onrender.com/scan"
+api_url = "https://scanner-mvp.onrender.com/scan"  # Correct your API URL here
 
-# Auto-refresh every 10 minutes (600 seconds)
+# Auto-refresh every 10 minutes (600 sec)
 st_autorefresh = st.experimental_rerun if (time.time() % 600) < 1 else None
 
-# Fetch data from backend
+# Header
+st.title("📈 Financial Risk Scanner Dashboard")
+st.markdown("""
+Real-time RiskScore and Event Timeline for Listed Companies.
+""")
+
+# Fetch data
 try:
     response = requests.get(api_url)
     data = response.json()
@@ -29,11 +32,11 @@ except Exception as e:
 # Last updated timestamp
 last_updated = datetime.now().strftime("%d %b %Y %H:%M:%S")
 
-# Company list for search filter
+# Company filter
 companies = [entry["company"] for entry in results]
 selected_company = st.selectbox("Select Company to View:", ["All Companies"] + companies)
 
-# Display results
+# Display companies
 for entry in results:
     company = entry["company"]
     riskscore = entry["riskscore"]
@@ -43,34 +46,44 @@ for entry in results:
     if selected_company != "All Companies" and company != selected_company:
         continue
 
-    # Risk Band Coloring
+    # Risk Band Color
     if band == "Green":
-        band_color = "#d4edda"
+        card_color = "#e6f4ea"
     elif band == "Amber":
-        band_color = "#fff3cd"
+        card_color = "#fff8e5"
     elif band == "Red":
-        band_color = "#f8d7da"
+        card_color = "#fdecea"
     else:
-        band_color = "#ffffff"
+        card_color = "#ffffff"
 
-    # Display Company Card
+    # Render company card
     with st.container():
         st.markdown(f"""
-            <div style='background-color: {band_color}; padding: 15px; border-radius: 10px;'>
-                <h3>{company}</h3>
-                <b>RiskScore:</b> {riskscore}<br>
-                <b>Risk Band:</b> {band}<br>
-                <b>Triggered Events:</b>
-                <ul>
-                    {''.join([f'<li>{event}</li>' for event in events]) if events else 'None'}
-                </ul>
-            </div>
-            <br>
+        <div style='background-color: {card_color}; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px #ddd;'>
+            <h2 style='margin-bottom: 0;'>{company} <span style='font-size:16px; color:gray;'>[{band}]</span></h2>
+            <h4 style='margin-top: 5px;'>RiskScore: <span style='color:black;'>{riskscore}</span></h4>
+            <hr>
+            <h5>Triggered Events:</h5>
+            <ul>
         """, unsafe_allow_html=True)
 
-# Last updated footer
+        if events:
+            for event in events:
+                st.markdown(f"<li>{event['date']} ➔ {event['event']}</li>", unsafe_allow_html=True)
+        else:
+            st.markdown("<li>No Events</li>", unsafe_allow_html=True)
+
+        st.markdown("""
+            </ul>
+        </div>
+        <br>
+        """, unsafe_allow_html=True)
+
+# Last updated timestamp
 st.info(f"Last Updated: {last_updated}")
 
-# Footer credit (optional)
-st.markdown("---")
-st.markdown("Built by 🚀 Financial Intelligence MVP")
+# Footer credit
+st.markdown("""
+---
+Built by 🚀 Financial Intelligence MVP | Powered by Streamlit Cloud
+""")
