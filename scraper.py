@@ -1,5 +1,7 @@
-# scraper.py
+# scraper.py (Updated to include event dates)
+
 import random
+from datetime import datetime, timedelta
 
 # Mock function to simulate scraping NSE/BSE
 def fetch_latest_announcements():
@@ -7,6 +9,11 @@ def fetch_latest_announcements():
     random_triggers = ["CFO_EXIT", "AUDITOR_EXIT", "PLEDGE_SPIKE", "NCLT_ADMISSION", "STATUTORY_DEFAULT"]
     data = []
     for company in companies:
-        triggers = random.sample(random_triggers, random.randint(0, 2))
-        data.append({"company": company, "events": triggers})
+        n = random.randint(0, 2)
+        events = []
+        for _ in range(n):
+            event_name = random.choice(random_triggers)
+            event_date = (datetime.now() - timedelta(days=random.randint(0, 30))).strftime("%Y-%m-%d")
+            events.append({"event": event_name, "date": event_date})
+        data.append({"company": company, "events": events})
     return data
