@@ -2,3 +2,6 @@ fastapi
 uvicorn
 streamlit
 requests
+requests
+beautifulsoup4
+playwright
