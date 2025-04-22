@@ -4,6 +4,18 @@ from fastapi import FastAPI
 from bse_scraper import fetch_bse_announcements
 from event_detector import detect_risk_event
 from risk_engine import calculate_riskscore
+from historical_scraper import fetch_bse_historical_announcements
+
+# Existing code...
+
+@app.get("/fetch-historical")
+def fetch_historical_data():
+    try:
+        fetch_bse_historical_announcements()
+        return {"message": "Historical data fetched and saved successfully!"}
+    except Exception as e:
+        return {"error": str(e)}
+
 
 app = FastAPI()
 
