@@ -7,7 +7,7 @@ st.title("📈 Financial Risk Scanner Dashboard")
 st.write("Real-time RiskScore based on latest events.")
 
 # Fetch data from backend API
-api_url = "https://scanner-mvp-production.up.railway.app/scan"  # (we will correct once deployed)
+api_url = "https://scanner-mvp.onrender.com/scan"  # (we will correct once deployed)
 try:
     response = requests.get(api_url)
     data = response.json()
