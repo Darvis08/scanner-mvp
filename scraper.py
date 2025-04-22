@@ -1,4 +1,4 @@
-# scraper.py (Updated to include event dates)
+# scraper.py (Fixed)
 
 import random
 from datetime import datetime, timedelta
@@ -14,6 +14,4 @@ def fetch_latest_announcements():
         for _ in range(n):
             event_name = random.choice(random_triggers)
             event_date = (datetime.now() - timedelta(days=random.randint(0, 30))).strftime("%Y-%m-%d")
-            events.append({"event": event_name, "date": event_date})
-        data.append({"company": company, "events": events})
-    return data
+            events.append({"event
