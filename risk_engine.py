@@ -1,4 +1,5 @@
-# risk_engine.py
+# risk_engine.py (slight update for new event structure)
+
 rules = {
     "CFO_EXIT": 10,
     "AUDITOR_EXIT": 10,
@@ -8,7 +9,7 @@ rules = {
 }
 
 def calculate_riskscore(events):
-    score = sum(rules.get(event, 0) for event in events)
+    score = sum(rules.get(event["event"], 0) for event in events)
     if score >= 80:
         band = "Severe Red"
     elif score >= 70:
