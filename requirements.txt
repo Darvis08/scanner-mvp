@@ -4,4 +4,6 @@ streamlit
 requests
 beautifulsoup4
 playwright
+fyers-apiv2
+pandas
 
